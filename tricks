@@ -1,0 +1,21 @@
+_classname__privateAttribute to get private attribute of a class from the oustide of that class.
+
+Flask 上下文管理：
+  -Different from Django, the way of achieve the management the context;
+    -django/tornado: send parameters
+    -flask context management ----> threading.local/Local class  Create a dictionary to save the UniqueID and  data, guarantee the isolate pf the data.
+      Request coming:
+        Package all the data in the RequestContext
+        Add RequsetContext object in the Local by the object of LocalStack
+      Transfer request:
+        request.method, print(reqeust), request+xxx will execute the method in the LocalProxy
+        Function
+        Get value from the Local through LocalStack
+        
+       Request termination：
+        pop method in LocalStack to get value error.
+        
+        
+        
+         
+    
