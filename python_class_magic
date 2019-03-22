@@ -48,3 +48,15 @@ __delattr__ 与 __setattr__ 相同，但是功能是删除一个属性而不是�
 注意与 __setattr__ 相同，防止无限递归现象发生。(在实现 __delattr__ 的时候调用 del self.name 即会发生) __getattribute__(self, name) __getattribute__ 与它的同伴 __setattr__ 和 __delattr__ 配合非常好。
 但是我不建议使用它。只有在新类型类定义中才能使用 __getattribute__ (在最新版本Python中所有的类都是新类型，在老版本中你可以通过继承 object 来制作一个新类。这样你可以定义一个属性值的访问规则。有时也会产生一些帝归现象。(这时候你可以调用基类的 __getattribute__ 方法来防止此现象的发生。)它可以消除对 __getattr__ 的使用，如果它被明确调用或者一个 AttributeError 被抛出，那么当实现 __getattribute__ 之后才能被调用。
 此方法是否被使用其实最终取决于你的选择。)我不建议使用它因为它的使用几率较小(我们在取得一个值而不是设置一个值的时候有特殊的行为是非常罕见的。)而且它不能避免会出现bug。
+
+在进行属性访问控制定义的时候你可能会很容易的引起一个错误。考虑下面的例子。
+def __setattr__(self, name, value):
+    self.name = value
+    #每当属性被赋值的时候， ``__setattr__()`` 会被调用，这样就造成了递归调用。
+    #这意味这会调用 ``self.__setattr__('name', value)`` ，每次方法会调用自己。这样会造成程序崩溃。
+
+def __setattr__(self, name, value):
+    self.__dict__[name] = value  #给类中的属性名分配值
+    #定制特有属性
+    
+   
