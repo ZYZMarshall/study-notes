@@ -1,0 +1,33 @@
+1. Flask session(内置：将session保存在加密cookie中实现)
+  -处理机制
+    -请求到来： 获取随机字符串， 存在则去“数据库”中获取原来的数据， 否则创建一个空容器。--->对象（随机字符串，（放置容器））
+      app.open_session----> 创建SecureCookieSessionINterface()--->open_session(self.request)= SecureCookieSession()
+      self.session = SecureCookieSession()对象
+      为session创建了一个特殊的字典类 
+      self.session = self.app.open_session(self.request)
+        open_session(self,app,reqeust):
+          #去用户请求的cookie中获取原来分配的随机字符串
+          #去cookie中获取key为session的值
+          val = request.cookies.get(app.session_cookie_name)
+          if not val:
+          #创建一个空字典。放到local的字典中，ctx.session  
+          return self.session_class()
+    -视图：操作内存中的对象
+    -响应：内存对象（随机字符串，（放置数据的容器））
+        -将数据保存在"数据库中"
+        -把随机字符串写在用户cookie中。
+  -自定义
+    请求到来
+      创建一个新的类中重写open_session()和save_session()
+    调用：
+      session -> LocalProxy -> 偏函数 -> LocalStack -> Local  
+    
+  -flask-session 组件
+    参照session.PNG
+    
+    
+   设置cookie时， 如何设定关闭浏览器则cookie失效：
+    response.set_cookie('k','v', expire=None)
+  
+2 wtforms
+  
